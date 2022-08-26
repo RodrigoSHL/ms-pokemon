@@ -1,6 +1,8 @@
 # compiled output
 /dist
 /node_modules
+/vscode
+/environment/local.env
 
 # Logs
 logs
