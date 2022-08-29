@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class PokemonService {
@@ -26,12 +26,10 @@ export class PokemonService {
     //http://localhost:3000/pokeapi/1
     const request: string = url + endpoint + id;
     try {
-      source$ = await this.httpService.get(request, {
-        timeout: 5000,
-      });
-      const response: any = await lastValueFrom(source$);
-      console.log('response', response.data);
-      return response.data;
+      source$ = this.httpService
+        .get(request)
+        .pipe(map((response) => response.data));
+      return source$;
     } catch (error) {
       console.log(error);
       return '';
